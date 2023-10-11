@@ -40,11 +40,11 @@ struct List_s {
 // Max number of nodes over all lists
 #define LIST_MAX_NUM_NODES 100
 
-// Create new list
+// Create new lis
 List* List_create();
 
 // Count items in list
 int List_count(List* pList);
-
-
+  
+ 
 #endif
