@@ -40,11 +40,58 @@ struct List_s {
 // Max number of nodes over all lists
 #define LIST_MAX_NUM_NODES 100
 
-// Create new lis
+// Create new list
 List* List_create();
 
 // Count items in list
 int List_count(List* pList);
-  
- 
+
+// Get first item, set to current item
+void* List_first(List* pList);
+
+// Fet the last item, set it as the current item
+void* List_last(List* pList); 
+
+// Advance to the next item in the list
+void* List_next(List* pList);
+
+// Get previous item in the list
+void* List_prev(List* pList);
+
+// Get the current item in the list
+void* List_curr(List* pList);
+
+// Insert item after the current item
+int List_insert_after(List* pList, void* pItem);
+
+// Function to insert an item before the current item
+int List_insert_before(List* pList, void* pItem);
+
+// Function to append an item to the end of the list
+int List_append(List* pList, void* pItem);
+
+// Function to prepend an item to the start of the list
+int List_prepend(List* pList, void* pItem);
+
+// Function to remove the current item from the list
+void* List_remove(List* pList);
+
+// Function to trim the last item from the list
+void* List_trim(List* pList);
+
+// Function to concatenate two lists
+void List_concat(List* pList1, List* pList2);
+
+// Typedef for the function to free an item's memory
+typedef void (*FREE_FN)(void* pItem);
+
+// Function to free the list and its items
+void List_free(List* pList, FREE_FN pItemFreeFn);
+
+// Typedef for the comparator function
+typedef bool (*COMPARATOR_FN)(void* pItem, void* pComparisonArg);
+
+// Function to search for an item in the list
+void* List_search(List* pList, COMPARATOR_FN pComparator, void* pComparisonArg);
+
 #endif
