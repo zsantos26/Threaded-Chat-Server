@@ -22,8 +22,7 @@ static int freeNodeTop = -1;  // Top of the stack for free nodes
 static int freeHeads[LIST_MAX_NUM_HEADS];
 static int freeHeadTop = -1;  // Top of the stack for free lists
 
-// Makes a new, empty list, and returns its reference on success. 
-// Returns a NULL pointer on failure.
+// Create new list
 List* List_create() {
     static bool initialized = false;
     if (!initialized) {
@@ -49,7 +48,7 @@ List* List_create() {
     return newList;
 }
 
-// Returns the number of items in pList.
+// Count items in list
 int List_count(List* pList) {
     assert(pList != NULL);
     return pList->count;
