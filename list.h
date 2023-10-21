@@ -34,6 +34,7 @@ struct List_s {
     int curr;   // Index to the current node
     int count;  // Number of elements in the list
 };
+
 // Max number of unique lists
 #define LIST_MAX_NUM_HEADS 10
 
