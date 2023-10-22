@@ -85,3 +85,25 @@ void* List_next(List* pList) {
     pList->curr = nodes[pList->curr].next;
     return nodes[pList->curr].data;
 }
+
+
+void* List_prev(List* pList) {
+    assert(pList != NULL);
+    if (pList->curr == -1 || nodes[pList->curr].prev == -1) {
+        pList->curr = -1;
+        return NULL;
+    }
+    pList->curr = nodes[pList->curr].prev;
+    return nodes[pList->curr].data;
+}
+
+
+void* List_curr(List* pList) {
+    assert(pList != NULL);
+    if (pList->curr == -1) {
+        return NULL;
+    }
+    return nodes[pList->curr].data;
+}
+
+
