@@ -53,3 +53,35 @@ int List_count(List* pList) {
     assert(pList != NULL);
     return pList->count;
 }
+
+
+void* List_first(List* pList) {
+    assert(pList != NULL);
+    if (pList->start == -1) {
+        pList->curr = -1;
+        return NULL;
+    }
+    pList->curr = pList->start;
+    return nodes[pList->curr].data;
+}
+
+
+void* List_last(List* pList) {
+    assert(pList != NULL);
+    if (pList->end == -1) {
+        pList->curr = -1;
+        return NULL;
+    }
+    pList->curr = pList->end;
+    return nodes[pList->curr].data;
+}
+
+void* List_next(List* pList) {
+    assert(pList != NULL);
+    if (pList->curr == -1 || nodes[pList->curr].next == -1) {
+        pList->curr = -1;
+        return NULL;
+    }
+    pList->curr = nodes[pList->curr].next;
+    return nodes[pList->curr].data;
+}

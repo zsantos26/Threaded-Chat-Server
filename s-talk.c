@@ -28,7 +28,7 @@ void* input_function(void* arg) {
  * Main function for initializing the chat application.
  * Checks command line arguments, initializes sockets and threads.
  */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) { 
     // Check command line arguments
     if (argc != 4) {
         printf("Usage: %s [my port number] [remote machine name] [remote port number]\n", argv[0]);
