@@ -106,4 +106,32 @@ void* List_curr(List* pList) {
     return nodes[pList->curr].data;
 }
 
+int List_insert_after(List* pList, void* pItem) {
+    assert(pList != NULL);
+    if (freeNodeTop == -1) {
+        return LIST_FAIL;  // No free nodes available
+    }
+    int newNodeIndex = freeNodes[freeNodeTop--];
+    nodes[newNodeIndex].data = pItem;
+    if (pList->curr == -1) {
+        // If no current item, insert at the end.
+        nodes[newNodeIndex].next = -1;
+        nodes[newNodeIndex].prev = -1;
+        pList->start = newNodeIndex;
+        pList->end = newNodeIndex;
+    } else {
+        // Insert after the current item.
+        nodes[newNodeIndex].next = nodes[pList->curr].next;
+        nodes[newNodeIndex].prev = pList->curr;
+        if (nodes[pList->curr].next != -1) {
+            nodes[nodes[pList->curr].next].prev = newNodeIndex;
+        } else {
+            pList->end = newNodeIndex;  // Update end if inserting at the end.
+        }
+        nodes[pList->curr].next = newNodeIndex;
+    }
+    pList->curr = newNodeIndex;  // Update current to the newly inserted item.
+    pList->count++;
+    return LIST_SUCCESS;
+}
 
