@@ -24,11 +24,7 @@ void* input_function(void* arg) {
 }
 
 
-/**
- * Main function for initializing the chat application.
- * Checks command line arguments, initializes sockets and threads.
- */
-int main(int argc, char *argv[]) { 
+int main(int argc, char *argv[]) {
     // Check command line arguments
     if (argc != 4) {
         printf("Usage: %s [my port number] [remote machine name] [remote port number]\n", argv[0]);
@@ -54,6 +50,24 @@ int main(int argc, char *argv[]) {
     }
 
     // Initialize server address structure
-  
+    memset(&serverAddr, '\0', sizeof(serverAddr));
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(myPort);
+    serverAddr.sin_addr.s_addr = INADDR_ANY;
+
+    // Initialize client address structure
+    memset(&clientAddr, '\0', sizeof(clientAddr));
+    clientAddr.sin_family = AF_INET;
+    clientAddr.sin_port = htons(remotePort);
+    clientAddr.sin_addr.s_addr = inet_addr(remoteMachineName);
+
+    // Bind socket
+    if (bind(sockfd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
+        perror("Error binding socket");
+        close(sockfd);
+        exit(1);
+    }
+
+
     return 0;
 }

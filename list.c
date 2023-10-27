@@ -135,3 +135,99 @@ int List_insert_after(List* pList, void* pItem) {
     return LIST_SUCCESS;
 }
 
+int List_insert_before(List* pList, void* pItem) {
+    assert(pList != NULL);
+    
+    if (freeNodeTop == -1) {
+        return LIST_FAIL; // No free nodes available
+    }
+
+    int newNodeIndex = freeNodes[freeNodeTop--];
+    nodes[newNodeIndex].data = pItem;
+
+    if (pList->curr == -1) {
+        // If no current item, insert at the start.
+        nodes[newNodeIndex].prev = -1;
+        nodes[newNodeIndex].next = pList->start;
+        
+        if (pList->start != -1) {
+            nodes[pList->start].prev = newNodeIndex;  // Update end if list was initially empty.
+        } else {
+            pList->end = newNodeIndex;
+        }
+        
+        pList->start = newNodeIndex;
+    } else {
+        // Insert before the current item.
+        nodes[newNodeIndex].prev = nodes[pList->curr].prev;
+        nodes[newNodeIndex].next = pList->curr;
+        nodes[pList->curr].prev = newNodeIndex;
+        
+        if (nodes[newNodeIndex].prev != -1) {
+            nodes[nodes[newNodeIndex].prev].next = newNodeIndex;
+        } else {
+            pList->start = newNodeIndex;  // Update start if inserting at the beginning.
+        }
+    }
+
+    pList->curr = newNodeIndex;  // Update current to the newly inserted item.
+    pList->count++;
+    return LIST_SUCCESS;
+}
+
+int List_append(List* pList, void* pItem) {
+    assert(pList != NULL);
+    if (freeNodeTop == -1) {
+        return LIST_FAIL; // No free nodes available
+    }
+
+    // Get an available node
+    int newNodeIndex = freeNodes[freeNodeTop--];
+    nodes[newNodeIndex].data = pItem;
+    nodes[newNodeIndex].next = -1; // It will be the last node
+    nodes[newNodeIndex].prev = pList->end;
+    
+    if (pList->end != -1) {
+        nodes[pList->end].next = newNodeIndex; // old last node's next will be this
+    }
+    pList->end = newNodeIndex; // new last node
+    
+    if (pList->start == -1) { // If the list was empty
+        pList->start = newNodeIndex;
+    }
+
+    // Make the new node the current item and update the count
+    pList->curr = newNodeIndex;
+    pList->count++;
+    return LIST_SUCCESS;
+}
+
+
+int List_prepend(List* pList, void* pItem) {
+    assert(pList != NULL);
+
+    // Check for available nodes
+    if (freeNodeTop == -1) {
+        return LIST_FAIL;  // No free nodes available
+    }
+    int newNodeIndex = freeNodes[freeNodeTop--];
+    nodes[newNodeIndex].data = pItem;
+
+    // If the list is empty, set start, end, and current pointers
+    if (pList->start == -1) {  // If the list is empty
+        nodes[newNodeIndex].next = -1;
+        nodes[newNodeIndex].prev = -1;
+        pList->start = newNodeIndex;
+        pList->end = newNodeIndex;
+        pList->curr = newNodeIndex;
+    } else {
+        // Otherwise, link the new node at the start
+        nodes[newNodeIndex].next = pList->start;
+        nodes[newNodeIndex].prev = -1;
+        nodes[pList->start].prev = newNodeIndex;
+        pList->start = newNodeIndex;
+        pList->curr = newNodeIndex;
+    }
+    pList->count++;
+    return LIST_SUCCESS;
+}
