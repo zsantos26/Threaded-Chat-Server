@@ -231,3 +231,121 @@ int List_prepend(List* pList, void* pItem) {
     pList->count++;
     return LIST_SUCCESS;
 }
+
+
+void* List_remove(List* pList) {
+    assert(pList != NULL);
+    
+    if (pList->curr == -1) {  // Check if current pointer is valid
+        return NULL;
+    }
+    
+    // Get node to remove and its data
+    int nodeToRemove = pList->curr;
+    void* data = nodes[nodeToRemove].data;
+
+    // Relink the previous node (if it exists)
+    if (nodes[nodeToRemove].prev != -1) {
+        nodes[nodes[nodeToRemove].prev].next = nodes[nodeToRemove].next;
+    } else {
+        pList->start = nodes[nodeToRemove].next;
+    }
+
+    // Relink the next node (if it exists)
+    if (nodes[nodeToRemove].next != -1) {
+        nodes[nodes[nodeToRemove].next].prev = nodes[nodeToRemove].prev;
+        pList->curr = nodes[nodeToRemove].next;
+    } else {
+        pList->end = nodes[nodeToRemove].prev;
+        pList->curr = -1;
+    }
+    
+    // Reset the removed node and add it back to the free node stack
+    nodes[nodeToRemove].data = NULL;
+    nodes[nodeToRemove].next = -1;
+    nodes[nodeToRemove].prev = -1;
+    freeNodes[++freeNodeTop] = nodeToRemove; // Add node to free node list
+    
+    pList->count--;
+    return data;
+}
+
+
+void* List_trim(List* pList) {
+    assert(pList != NULL);
+    if (pList->end == -1) {
+        return NULL;
+    }
+    Node* nodeToRemove = &nodes[pList->end];
+    void* data = nodeToRemove->data;
+
+    // Re-link the list to exclude the last node
+    if (nodeToRemove->prev != -1) {
+        nodes[nodeToRemove->prev].next = -1;
+        pList->curr = nodeToRemove->prev;
+    } else {
+        pList->start = -1;
+        pList->curr = -1;
+    }
+    
+    // Update list's end pointer and free the removed node
+    pList->end = nodeToRemove->prev;
+    freeNodes[++freeNodeTop] = pList->end;
+    pList->count--;
+
+    return data;
+}
+
+
+void List_concat(List* pList1, List* pList2) {
+    assert(pList1 != NULL && pList2 != NULL);
+
+    // If pList2 is empty,  deallocate it and return
+    if (pList2->start == -1) {
+        freeHeads[++freeHeadTop] = pList2 - lists;  
+        return;
+    }
+    
+    // Concatenate pList2 to the end of pList1
+    if (pList1->end != -1) {
+        nodes[pList1->end].next = pList2->start;
+    } else {
+        pList1->start = pList2->start;
+    }
+    
+    nodes[pList2->start].prev = pList1->end;
+    pList1->end = pList2->end;
+    pList1->count += pList2->count;
+
+    freeHeads[++freeHeadTop] = pList2 - lists;  // Deallocate pList2
+}
+
+void List_free(List* pList, FREE_FN pItemFreeFn) {
+    assert(pList != NULL);
+
+    // Traverse the list and free each node's data
+    int currentIndex = pList->start;
+    while (currentIndex != -1) {
+        int nextIndex = nodes[currentIndex].next;
+        pItemFreeFn(nodes[currentIndex].data);
+        freeNodes[++freeNodeTop] = currentIndex;
+        currentIndex = nextIndex;
+    }
+    freeHeads[++freeHeadTop] = (pList - lists);  // Deallocate the list head
+}
+
+void* List_search(List* pList, COMPARATOR_FN pComparator, void* pComparisonArg) {
+    assert(pList != NULL);
+
+    // Start search from the current item or the start if the current pointer is invalid
+    int currentIndex = (pList->curr == -1) ? pList->start : pList->curr;
+    while (currentIndex != -1) {  // Iterate through the list
+        if (pComparator(nodes[currentIndex].data, pComparisonArg)) {
+            pList->curr = currentIndex;
+            return nodes[currentIndex].data;
+        }
+        currentIndex = nodes[currentIndex].next;
+    }
+    pList->curr = -1;
+    return NULL;
+}
