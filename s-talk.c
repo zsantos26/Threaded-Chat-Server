@@ -1,3 +1,11 @@
+/*
+ * s-talk.c
+ *
+ * Description: Main file for chat server. Contains main(), thread functions to enable message interactions, and variable initialization. 
+ * Author: Zeth Santos
+ * Created: Oct 9 2023
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

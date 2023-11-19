@@ -2,9 +2,8 @@
  * list.c
  *
  * Description: Implementing functions declared in list.h Doubly linked list data structure, function declarations, etc. 
- * 
  * Author: Zeth Santos
- * Date: Oct 10 2023
+ * Created: Oct 9 2023
 */
 
 #include "list.h"
