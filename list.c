@@ -53,7 +53,7 @@ int List_count(List* pList) {
     return pList->count;
 }
 
-
+// Get first item, set to current item
 void* List_first(List* pList) {
     assert(pList != NULL);
     if (pList->start == -1) {
@@ -64,7 +64,7 @@ void* List_first(List* pList) {
     return nodes[pList->curr].data;
 }
 
-
+// Get the last item, set it as the current item
 void* List_last(List* pList) {
     assert(pList != NULL);
     if (pList->end == -1) {

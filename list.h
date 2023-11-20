@@ -49,7 +49,7 @@ int List_count(List* pList);
 // Get first item, set to current item
 void* List_first(List* pList);
 
-// Fet the last item, set it as the current item
+// Get the last item, set it as the current item
 void* List_last(List* pList); 
 
 // Advance to the next item in the list
