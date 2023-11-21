@@ -75,6 +75,7 @@ void* List_last(List* pList) {
     return nodes[pList->curr].data;
 }
 
+// Advance to the next item in the list
 void* List_next(List* pList) {
     assert(pList != NULL);
     if (pList->curr == -1 || nodes[pList->curr].next == -1) {
@@ -85,7 +86,7 @@ void* List_next(List* pList) {
     return nodes[pList->curr].data;
 }
 
-
+// Get previous item in the list
 void* List_prev(List* pList) {
     assert(pList != NULL);
     if (pList->curr == -1 || nodes[pList->curr].prev == -1) {
@@ -96,7 +97,7 @@ void* List_prev(List* pList) {
     return nodes[pList->curr].data;
 }
 
-
+// Get the current item in the list
 void* List_curr(List* pList) {
     assert(pList != NULL);
     if (pList->curr == -1) {
@@ -105,6 +106,7 @@ void* List_curr(List* pList) {
     return nodes[pList->curr].data;
 }
 
+// Insert item after the current item
 int List_insert_after(List* pList, void* pItem) {
     assert(pList != NULL);
     if (freeNodeTop == -1) {
@@ -134,8 +136,7 @@ int List_insert_after(List* pList, void* pItem) {
     return LIST_SUCCESS;
 }
 
-
-
+// Function to insert an item before the current item
 int List_insert_before(List* pList, void* pItem) {
     assert(pList != NULL);
     
@@ -176,6 +177,7 @@ int List_insert_before(List* pList, void* pItem) {
     return LIST_SUCCESS;
 }
 
+// Function to append an item to the end of the list
 int List_append(List* pList, void* pItem) {
     assert(pList != NULL);
     if (freeNodeTop == -1) {
@@ -203,7 +205,7 @@ int List_append(List* pList, void* pItem) {
     return LIST_SUCCESS;
 }
 
-
+// Function to prepend an item to the start of the list
 int List_prepend(List* pList, void* pItem) {
     assert(pList != NULL);
 
@@ -233,7 +235,7 @@ int List_prepend(List* pList, void* pItem) {
     return LIST_SUCCESS;
 }
 
-
+// Function to remove the current item from the list
 void* List_remove(List* pList) {
     assert(pList != NULL);
     
@@ -271,7 +273,7 @@ void* List_remove(List* pList) {
     return data;
 }
 
-
+// Function to trim the last item from the list
 void* List_trim(List* pList) {
     assert(pList != NULL);
     if (pList->end == -1) {
@@ -297,7 +299,7 @@ void* List_trim(List* pList) {
     return data;
 }
 
-
+// Function to concatenate two lists
 void List_concat(List* pList1, List* pList2) {
     assert(pList1 != NULL && pList2 != NULL);
 
@@ -321,6 +323,7 @@ void List_concat(List* pList1, List* pList2) {
     freeHeads[++freeHeadTop] = pList2 - lists;  // Deallocate pList2
 }
 
+// Function to free the list and its items
 void List_free(List* pList, FREE_FN pItemFreeFn) {
     assert(pList != NULL);
 
@@ -335,6 +338,7 @@ void List_free(List* pList, FREE_FN pItemFreeFn) {
     freeHeads[++freeHeadTop] = (pList - lists);  // Deallocate the list head
 }
 
+// Function to search for an item in the list
 void* List_search(List* pList, COMPARATOR_FN pComparator, void* pComparisonArg) {
     assert(pList != NULL);
 
